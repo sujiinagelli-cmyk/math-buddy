@@ -66,17 +66,17 @@ const CHAPTERS = [
  {id:"realnum", name:"Real Numbers", built:true},
  {id:"poly", name:"Polynomials", built:true},
  {id:"quad", name:"Quadratic Equations", built:true},
- {id:"sets", name:"Sets"},
- {id:"pairlin", name:"Pair of Linear Equations in Two Variables"},
- {id:"prog", name:"Progressions"},
- {id:"coord", name:"Coordinate Geometry"},
- {id:"simtri", name:"Similar Triangles"},
- {id:"tangent", name:"Tangents and Secants to a Circle"},
- {id:"mensur", name:"Mensuration"},
- {id:"trig", name:"Trigonometry"},
- {id:"apptrig", name:"Applications of Trigonometry"},
- {id:"prob", name:"Probability"},
- {id:"stats", name:"Statistics"}
+ {id:"sets", name:"Sets", built:true},
+ {id:"pairlin", name:"Pair of Linear Equations in Two Variables", built:true},
+ {id:"prog", name:"Progressions", built:true},
+ {id:"coord", name:"Coordinate Geometry", built:true},
+ {id:"simtri", name:"Similar Triangles", built:true},
+ {id:"tangent", name:"Tangents and Secants to a Circle", built:true},
+ {id:"mensur", name:"Mensuration", built:true},
+ {id:"trig", name:"Trigonometry", built:true},
+ {id:"apptrig", name:"Applications of Trigonometry", built:true},
+ {id:"prob", name:"Probability", built:true},
+ {id:"stats", name:"Statistics", built:true}
 ];
 
 const FORMULAS = {
@@ -323,6 +323,182 @@ const TOPICS = {
     {q:"Is it possible to design a rectangular park of perimeter 80m and area 400m²? Use discriminant to check.", diff:"Word problem", steps:["Let length=x. Width=(40-x). Area=x(40-x)=400","40x-x²=400 → x²-40x+400=0","D=1600-1600=0","D=0, so yes — a unique rectangle (a square of side 20m) is possible"]},
     {q:"Find the values of k for which x²+k(2x+k-1)+2=0 has real and equal roots.", diff:"Medium", steps:["x²+2kx+k²-k+2=0","D=4k²-4(k²-k+2)=0 → 4k-8=0 → k=2"]}
    ]}
+ ],
+ sets: [
+  {id:"setops", name:"Set Operations (Union, Intersection, Difference)",
+   concept:"Union combines elements, intersection keeps only shared elements, and difference removes elements of one set from another. n(A∪B)=n(A)+n(B)-n(A∩B) links their sizes.",
+   examples:[
+    {q:"If A={1,2,3,4}, B={3,4,5,6}, find A∪B, A∩B, A-B.", steps:["A∪B = {1,2,3,4,5,6}","A∩B = {3,4}","A-B = {1,2}"]},
+    {q:"In a class of 50, 30 like Maths, 25 like Science, 15 like both. Find how many like at least one subject.", steps:["n(M∪S)=n(M)+n(S)-n(M∩S)","= 30+25-15 = 40","40 students like at least one subject"]}
+   ],
+   problems:[
+    {q:"If A={a,b,c,d}, B={b,d,f}, find A∪B and A∩B.", diff:"Direct", steps:["A∪B = {a,b,c,d,f}","A∩B = {b,d}"]},
+    {q:"If A={2,4,6,8,10}, B={4,8,12}, find A-B and B-A.", diff:"Direct", steps:["A-B = {2,6,10} (in A, not B)","B-A = {12} (in B, not A)"]},
+    {q:"In a survey of 100 people, 60 read newspaper X, 40 read newspaper Y, 20 read both. How many read neither?", diff:"Word problem", steps:["n(X∪Y)=60+40-20=80","People reading neither = 100-80 = 20"]},
+    {q:"If n(A)=20, n(B)=28, n(A∪B)=36, find n(A∩B).", diff:"Medium", steps:["n(A∩B)=n(A)+n(B)-n(A∪B)","=20+28-36=12"]},
+    {q:"If U={1..10}, A={2,4,6,8,10}, find A' (complement of A in U).", diff:"Medium", steps:["A' = elements in U but not in A","A' = {1,3,5,7,9}"]},
+    {q:"Out of 120 students, 80 play cricket, 60 play football, 40 play both. How many play only cricket?", diff:"Word problem", steps:["Only cricket = n(C)-n(C∩F) = 80-40 = 40 students"]}
+   ]}
+ ],
+ pairlin: [
+  {id:"wordprob", name:"Solving Word Problems using Pair of Equations",
+   concept:"Translate the word problem into two linear equations by assigning variables to the unknown quantities, then solve using substitution, elimination, or cross-multiplication.",
+   examples:[
+    {q:"The sum of two numbers is 8 and their difference is 2. Find the numbers.", steps:["Let numbers be x, y: x+y=8, x-y=2","Adding: 2x=10 → x=5","Then y=8-5=3","Numbers are 5 and 3"]},
+    {q:"5 years ago, a father was 7 times as old as his son. 5 years hence, he will be 3 times as old. Find their present ages.", steps:["Let father=x, son=y (present ages)","(x-5)=7(y-5) → x-7y=-30","(x+5)=3(y+5) → x-3y=10","Subtract: -4y=-40 → y=10, then x=40"]}
+   ],
+   problems:[
+    {q:"The sum of the ages of a father and son is 45 years. 5 years ago, father's age was 4 times son's age. Find their present ages.", diff:"Word problem", steps:["x+y=45. (x-5)=4(y-5) → x-4y=-15","Subtract from x+y=45: 5y=60 → y=12, x=33"]},
+    {q:"A fraction becomes 1/3 when 2 is subtracted from numerator and denominator; it becomes 1/2 when 1 is added to both. Find the fraction.", diff:"Medium", steps:["Let fraction=x/y","(x-2)/(y-2)=1/3 → 3x-y=4","(x+1)/(y+1)=1/2 → 2x-y=-1","Subtract: x=5, then y=11. Fraction=5/11"]},
+    {q:"2 tables and 3 chairs cost ₹2000; 3 tables and 2 chairs cost ₹2500. Find the cost of each.", diff:"Word problem", steps:["2x+3y=2000, 3x+2y=2500","Multiply first by 3, second by 2: 6x+9y=6000, 6x+4y=5000","Subtract: 5y=1000 → y=200, then x=700"]},
+    {q:"Solve graphically-style: x+y=6, 2x-y=3 (solve algebraically).", diff:"Direct", steps:["Add: 3x=9 → x=3, then y=3"]},
+    {q:"The sum of a two-digit number and the number formed by reversing its digits is 66. The digits differ by 2. Find the number.", diff:"Word problem", steps:["Let digits be x,y: number=10x+y","(10x+y)+(10y+x)=66 → 11(x+y)=66 → x+y=6","x-y=2 (assume x>y)","Adding: 2x=8 → x=4, y=2. Number=42"]},
+    {q:"7 pens and 5 pencils cost ₹58; 5 pens and 7 pencils cost ₹50. Find the cost of a pen and a pencil.", diff:"Medium", steps:["7x+5y=58, 5x+7y=50","Multiply first by 7, second by 5: 49x+35y=406, 25x+35y=250","Subtract: 24x=156 → x=6.5... check: 24x=156, x=6.5, then y=(58-45.5)/5=2.5"]}
+   ]}
+ ],
+ prog: [
+  {id:"apterms", name:"AP — nth Term and Sum of n Terms",
+   concept:"Use aₙ=a+(n-1)d to find any term, and Sₙ=n/2[2a+(n-1)d] to find the sum of the first n terms of an arithmetic progression.",
+   examples:[
+    {q:"Find the 20th term of the AP 3, 7, 11, 15, ...", steps:["a=3, d=4","a20 = 3+(20-1)×4 = 3+76 = 79"]},
+    {q:"Find the sum of the first 15 terms of the AP 2, 5, 8, 11, ...", steps:["a=2, d=3, n=15","S15 = 15/2[2(2)+(14)(3)] = 15/2[4+42] = 15/2×46 = 345"]}
+   ],
+   problems:[
+    {q:"Find the 25th term of the AP 10, 7, 4, 1, ...", diff:"Direct", steps:["a=10, d=-3","a25=10+24(-3)=10-72=-62"]},
+    {q:"How many terms of the AP 9, 17, 25, ... must be taken to give a sum of 636?", diff:"Medium", steps:["a=9, d=8. Sn=636","636=n/2[18+(n-1)8]","636=n/2[8n+10] → 1272=8n²+10n","8n²+10n-1272=0 → 4n²+5n-636=0","Solve: n=(-5±√(25+10176))/8=(-5±101)/8 → n=12"]},
+    {q:"Find the sum of first 22 terms of AP with a=8, common difference d=3.", diff:"Direct", steps:["S22=22/2[2(8)+21(3)]=11[16+63]=11×79=869"]},
+    {q:"The 3rd term of an AP is 16, and the 7th term exceeds the 5th term by 12. Find the AP.", diff:"Word problem", steps:["a+2d=16","(a+6d)-(a+4d)=12 → 2d=12 → d=6","a=16-12=4","AP: 4,10,16,22,..."]},
+    {q:"Find the sum of first 40 positive integers divisible by 6.", diff:"Word problem", steps:["AP: 6,12,18,... a=6,d=6,n=40","S40=40/2[2(6)+39(6)]=20[12+234]=20×246=4920"]},
+    {q:"Which term of the AP 21, 18, 15, ... is -81?", diff:"Medium", steps:["a=21,d=-3. aₙ=-81","21+(n-1)(-3)=-81 → -3(n-1)=-102 → n-1=34 → n=35"]}
+   ]}
+ ],
+ coord: [
+  {id:"distarea", name:"Distance, Section Formula & Area of Triangle",
+   concept:"Distance formula finds the length between two points; section formula finds a point dividing a segment in a ratio; the area formula finds a triangle's area from its three vertices.",
+   examples:[
+    {q:"Find the point which divides the line segment joining (4,-3) and (8,5) in the ratio 3:1.", steps:["Using section formula with m=3,n=1","x=(3×8+1×4)/4=28/4=7","y=(3×5+1×(-3))/4=12/4=3","Point: (7,3)"]},
+    {q:"Find the area of the triangle with vertices (1,-1), (-4,6), (-3,-5).", steps:["Area=½|1(6-(-5))+(-4)(-5-(-1))+(-3)(-1-6)|","=½|1(11)+(-4)(-4)+(-3)(-7)|","=½|11+16+21|=½(48)=24"]}
+   ],
+   problems:[
+    {q:"Find the distance between points (2,3) and (4,1).", diff:"Direct", steps:["√((4-2)²+(1-3)²)=√(4+4)=√8=2√2"]},
+    {q:"Find the point on the x-axis equidistant from (2,-5) and (-2,9).", diff:"Medium", steps:["Point on x-axis: (x,0)","(x-2)²+25=(x+2)²+81","x²-4x+4+25=x²+4x+4+81","-4x+29=4x+85 → -8x=56 → x=-7","Point: (-7,0)"]},
+    {q:"Find the ratio in which the point (-1,6) divides the segment joining (-3,10) and (6,-8).", diff:"Medium", steps:["Let ratio=k:1. x=(6k-3)/(k+1)=-1","6k-3=-k-1 → 7k=2 → k=2/7","Ratio = 2:7"]},
+    {q:"Find the area of the triangle with vertices (0,0), (6,0), (0,8).", diff:"Direct", steps:["Area=½|0(0-8)+6(8-0)+0(0-0)|=½|48|=24"]},
+    {q:"Show that points (1,1), (2,3), (4,7) are collinear.", diff:"Medium", steps:["Area=½|1(3-7)+2(7-1)+4(1-3)|","=½|-4+12-8|=½(0)=0","Area=0 means the points are collinear"]},
+    {q:"Find the coordinates of the midpoint of the segment joining (-6,7) and (8,-5).", diff:"Direct", steps:["Midpoint=((-6+8)/2,(7-5)/2)=(1,1)"]}
+   ]}
+ ],
+ simtri: [
+  {id:"bptpyth", name:"Basic Proportionality Theorem & Pythagoras Theorem",
+   concept:"BPT: a line parallel to one side of a triangle divides the other two sides proportionally. Pythagoras: in a right triangle, hypotenuse²=sum of squares of the other two sides.",
+   examples:[
+    {q:"In ΔABC, DE∥BC, AD=2cm, DB=3cm, AE=3cm. Find EC.", steps:["By BPT: AD/DB=AE/EC","2/3=3/EC → EC=9/2=4.5cm"]},
+    {q:"A ladder 17m long reaches a window 15m above the ground. Find the distance of the foot of the ladder from the wall.", steps:["Hypotenuse=17, height=15","base²=17²-15²=289-225=64","base=8m"]}
+   ],
+   problems:[
+    {q:"In ΔABC, DE∥BC. If AD=4, DB=6, AE=5, find EC.", diff:"Direct", steps:["AD/DB=AE/EC → 4/6=5/EC","EC=(5×6)/4=7.5"]},
+    {q:"A right triangle has legs 9cm and 12cm. Find the hypotenuse.", diff:"Direct", steps:["h=√(9²+12²)=√(81+144)=√225=15cm"]},
+    {q:"Two poles of height 6m and 11m stand 12m apart. Find the distance between their tops.", diff:"Word problem", steps:["Height difference=5m, horizontal distance=12m","Distance=√(5²+12²)=√(25+144)=√169=13m"]},
+    {q:"In ΔABC, D and E are points on AB and AC such that DE∥BC. If AD/DB=3/5, and AC=16, find AE.", diff:"Medium", steps:["AE/EC=3/5, and AE+EC=16","AE=3k, EC=5k → 8k=16 → k=2","AE=6"]},
+    {q:"A man goes 15m due east then 20m due north. Find his distance from the starting point.", diff:"Word problem", steps:["Distance=√(15²+20²)=√(225+400)=√625=25m"]},
+    {q:"Prove: in a right triangle, the square of the hypotenuse equals the sum of squares of the other two sides, for a 6-8-10 triangle.", diff:"Direct", steps:["Check: 6²+8²=36+64=100","10²=100","Confirms Pythagoras theorem holds"]}
+   ]}
+ ],
+ tangent: [
+  {id:"tanglen", name:"Tangent Length & Tangent Theorems",
+   concept:"Use the fact that a tangent is perpendicular to the radius, and that two tangents from an external point are equal in length, to solve for unknown lengths and angles.",
+   examples:[
+    {q:"From a point Q, the length of tangent to a circle of radius 5cm is 12cm. Find the distance OQ (O=center).", steps:["Tangent⊥radius, so OQ²=OT²+QT²","OQ²=5²+12²=25+144=169","OQ=13cm"]},
+    {q:"PA and PB are tangents from an external point P to a circle with center O. If ∠APB=60°, find ∠AOB.", steps:["OAPB forms a kite; ∠OAP=∠OBP=90°","Sum of angles in quadrilateral=360°","∠AOB=360-90-90-60=120°"]}
+   ],
+   problems:[
+    {q:"A tangent PQ at a point P of a circle of radius 5cm meets a line through center O at Q, such that OQ=12cm. Find PQ.", diff:"Direct", steps:["PQ²=OQ²-OP²=144-25=119","PQ=√119 ≈ 10.9cm"]},
+    {q:"Two concentric circles have radii 5cm and 3cm. Find the length of the chord of the larger circle which touches the smaller circle.", diff:"Medium", steps:["Half-chord²=5²-3²=25-9=16","Half-chord=4, full chord=8cm"]},
+    {q:"PA and PB are tangents to a circle from external point P, with PA=10cm. Find PB and explain why.", diff:"Direct", steps:["Tangents from the same external point are equal","PB=10cm (by tangent-length theorem)"]},
+    {q:"A circle is inscribed in a triangle with sides 8,6,10cm touching all sides. Find the radius (right triangle).", diff:"Word problem", steps:["Check right triangle: 6²+8²=36+64=100=10² ✓","r=(a+b-c)/2 for right triangle=(6+8-10)/2=2cm"]},
+    {q:"In a circle of radius 7cm, tangent PT is drawn from point P where OP=25cm. Find the length of the tangent PT.", diff:"Direct", steps:["PT²=OP²-OT²=625-49=576","PT=24cm"]},
+    {q:"If tangents PA and PB from point P to a circle with center O are inclined to each other at 80°, find ∠POA.", diff:"Medium", steps:["OA⊥PA, so ∠OAP=90°","In triangle OAP: ∠AOP+∠OAP+∠APO=180","∠APO=40° (half of 80°, by symmetry)","∠AOP=180-90-40=50°"]}
+   ]}
+ ],
+ mensur: [
+  {id:"combsolids", name:"Volume & Surface Area of Combined Solids",
+   concept:"For solids made of two or more basic shapes joined together, add/subtract the relevant volumes or surface areas of the individual parts — don't double count the joined faces.",
+   examples:[
+    {q:"A cylinder of radius 7cm and height 10cm has a cone of the same radius and height 3cm on top. Find the total volume. (π=22/7)", steps:["Cylinder vol=πr²h=22/7×49×10=1540 cm³","Cone vol=⅓πr²h=⅓×22/7×49×3=154 cm³","Total=1540+154=1694 cm³"]},
+    {q:"A solid is a hemisphere of radius 3.5cm mounted on a cylinder of the same radius and height 6cm. Find total surface area. (π=22/7)", steps:["Cylinder CSA=2πrh=2×22/7×3.5×6=132cm²","Cylinder base (bottom only, circle)=πr²=22/7×12.25=38.5cm²","Hemisphere CSA=2πr²=2×38.5=77cm²","Total TSA=132+38.5+77=247.5cm²"]}
+   ],
+   problems:[
+    {q:"A toy is a cone of height 12cm and radius 3cm mounted on a hemisphere of the same radius. Find total volume. (π=22/7)", diff:"Word problem", steps:["Cone vol=⅓πr²h=⅓×22/7×9×12=113.14cm³ approx","Hemisphere vol=⅔πr³=⅔×22/7×27=56.57cm³ approx","Total≈169.7cm³"]},
+    {q:"A cylindrical tank has radius 6m, height 10m. Find its volume. (π=3.14)", diff:"Direct", steps:["V=πr²h=3.14×36×10=1130.4 m³"]},
+    {q:"A solid sphere of radius 6cm is melted and recast into small spheres of radius 1cm. Find the number of small spheres.", diff:"Medium", steps:["Volume conserved: (4/3)π(6)³=n×(4/3)π(1)³","216=n → n=216 spheres"]},
+    {q:"A cone of radius 5cm and height 12cm has its slant surface area calculated. Find the slant height and CSA. (π=3.14)", diff:"Direct", steps:["l=√(r²+h²)=√(25+144)=13cm","CSA=πrl=3.14×5×13=204.1cm²"]},
+    {q:"Water in a cylindrical container (radius 6cm, height 15cm, full) is poured into a cone of radius 6cm, height 15cm. Will it overflow?", diff:"Word problem", steps:["Cylinder vol=πr²h=π(36)(15)=540π","Cone vol=⅓πr²h=⅓π(36)(15)=180π","Cylinder volume is 3× the cone volume, so yes, it will overflow"]},
+    {q:"Find the volume of a hemisphere of diameter 21cm. (π=22/7)", diff:"Direct", steps:["r=10.5cm","V=⅔πr³=⅔×22/7×1157.6≈2425.5cm³"]}
+   ]}
+ ],
+ trig: [
+  {id:"identities", name:"Trigonometric Identities & Evaluating Expressions",
+   concept:"Use sin²θ+cos²θ=1, 1+tan²θ=sec²θ, and 1+cot²θ=cosec²θ to simplify expressions or prove identities, without needing standard angle values.",
+   examples:[
+    {q:"Prove that (1-cos²θ)/sin²θ = 1.", steps:["1-cos²θ = sin²θ (from the identity)","So (1-cos²θ)/sin²θ = sin²θ/sin²θ = 1"]},
+    {q:"Evaluate sin²30°+cos²30°.", steps:["This equals 1 for any angle by the identity sin²θ+cos²θ=1","Answer: 1"]}
+   ],
+   problems:[
+    {q:"Prove: (secθ-tanθ)(secθ+tanθ) = 1.", diff:"Direct", steps:["= sec²θ-tan²θ (difference of squares)","= 1 (from identity 1+tan²θ=sec²θ, so sec²θ-tan²θ=1)"]},
+    {q:"If sinθ=12/13, find cosθ and tanθ (θ acute).", diff:"Direct", steps:["cos²θ=1-sin²θ=1-144/169=25/169","cosθ=5/13","tanθ=sinθ/cosθ=12/5"]},
+    {q:"Prove: (1+tan²A)/(1+cot²A) = tan²A.", diff:"Medium", steps:["1+tan²A=sec²A, 1+cot²A=cosec²A","sec²A/cosec²A = (1/cos²A)/(1/sin²A) = sin²A/cos²A = tan²A"]},
+    {q:"Simplify: sinθcosecθ - cosθsecθ + tan²θ-sec²θ.", diff:"Medium", steps:["sinθ×(1/sinθ)=1, cosθ×(1/cosθ)=1","1-1 + (tan²θ-sec²θ) = 0 + (-1) [since sec²θ-tan²θ=1]","= -1"]},
+    {q:"If cosA=7/25, find sinA and tanA.", diff:"Direct", steps:["sin²A=1-49/625=576/625","sinA=24/25","tanA=24/7"]},
+    {q:"Prove: cosecθ - cotθ = sinθ/(1+cosθ).", diff:"Medium", steps:["LHS=1/sinθ - cosθ/sinθ = (1-cosθ)/sinθ","Multiply RHS by (1-cosθ)/(1-cosθ): sinθ(1-cosθ)/(1-cos²θ)=sinθ(1-cosθ)/sin²θ=(1-cosθ)/sinθ","Both sides equal (1-cosθ)/sinθ ✓"]}
+   ]}
+ ],
+ apptrig: [
+  {id:"heightsdist", name:"Heights and Distances Word Problems",
+   concept:"Draw a right triangle from the given elevation/depression angle, identify the known side (usually the horizontal distance or height), and use the correct trig ratio (tan usually) to solve for the unknown.",
+   examples:[
+    {q:"A tower stands 100m from an observer. The angle of elevation to its top is 30°. Find the height of the tower.", steps:["tan30° = height/100","height = 100×tan30° = 100×(1/√3) = 100/√3 ≈ 57.7m"]},
+    {q:"From the top of a 20m tall building, the angle of depression of a car is 45°. Find the distance of the car from the building's base.", steps:["tan45° = 20/distance","1 = 20/distance → distance = 20m"]}
+   ],
+   problems:[
+    {q:"A kite is flying at a height of 60m, attached to a string inclined at 60° to the ground. Find the length of the string.", diff:"Word problem", steps:["sin60° = 60/L","L = 60/sin60° = 60/(√3/2) = 120/√3 = 40√3 m"]},
+    {q:"The angle of elevation of the top of a tower from a point 30m away is 30°. Find the height of the tower.", diff:"Direct", steps:["tan30° = h/30","h = 30×(1/√3) = 10√3 m"]},
+    {q:"From a point on the ground, the angle of elevation of the top of a tower is 60°. Moving 40m closer, the angle becomes 90°... (instead: from 40m away, angle is 60°, find height).", diff:"Direct", steps:["tan60°=h/40","h=40√3 m"]},
+    {q:"Two ships are on either side of a lighthouse 75m tall. Angles of depression are 30° and 45°. Find the distance between the ships.", diff:"Word problem", steps:["Ship 1: tan30°=75/d1 → d1=75√3","Ship 2: tan45°=75/d2 → d2=75","Distance = d1+d2 = 75√3+75 = 75(√3+1) ≈ 204.9m"]},
+    {q:"The shadow of a tower is 30m long when the sun's elevation is 30°, and 20m when it is θ. Find θ.", diff:"Medium", steps:["Height h=30tan30°=30/√3=10√3","tanθ=h/20=10√3/20=√3/2... recompute using known height:","Actually h=10√3, tanθ=10√3/20=0.866 → θ≈60°"]},
+    {q:"A man standing 40m from a tower observes the angle of elevation of the top as 45°. Find the height of the tower.", diff:"Direct", steps:["tan45°=h/40 → h=40m (since tan45°=1)"]}
+   ]}
+ ],
+ prob: [
+  {id:"basicprob", name:"Probability of Single Events",
+   concept:"Identify the total number of equally likely outcomes and the number that satisfy the event, then apply P(E) = favourable/total.",
+   examples:[
+    {q:"A bag has 3 red, 4 blue, 5 green balls. Find the probability of drawing a blue ball.", steps:["Total balls=3+4+5=12","Favourable (blue)=4","P(blue)=4/12=1/3"]},
+    {q:"Two dice are rolled. Find P(sum = 7).", steps:["Total outcomes=36","Favourable: (1,6)(2,5)(3,4)(4,3)(5,2)(6,1) = 6 outcomes","P(sum=7)=6/36=1/6"]}
+   ],
+   problems:[
+    {q:"A card is drawn from a well-shuffled deck of 52. Find P(getting a face card).", diff:"Direct", steps:["Face cards = 4 suits × 3 (J,Q,K) = 12","P = 12/52 = 3/13"]},
+    {q:"A box has 90 discs numbered 1-90. Find the probability of picking a disc with a two-digit number.", diff:"Medium", steps:["Two-digit numbers: 10 to 90 → 81 numbers","P = 81/90 = 9/10"]},
+    {q:"A die is thrown once. Find P(number is a multiple of 3 or 5).", diff:"Direct", steps:["Multiples of 3 or 5 among 1-6: 3,5,6 → 3 outcomes","P = 3/6 = 1/2"]},
+    {q:"A bag has 5 red and 3 black balls. One ball is drawn. Find P(not black).", diff:"Direct", steps:["Total=8, black=3","P(not black) = 1 - 3/8 = 5/8"]},
+    {q:"From a group of 3 boys and 2 girls, a person is selected at random. Find P(girl is selected).", diff:"Word problem", steps:["Total=5, girls=2","P = 2/5"]},
+    {q:"Two coins are tossed simultaneously. Find P(at least one head).", diff:"Medium", steps:["Sample space: HH,HT,TH,TT (4 outcomes)","At least one head: HH,HT,TH = 3 outcomes","P = 3/4"]}
+   ]}
+ ],
+ stats: [
+  {id:"meanmedmode", name:"Mean, Median, Mode of Grouped Data",
+   concept:"For grouped (class interval) data, use the direct/assumed-mean formula for mean, the cumulative frequency method for median, and the modal class formula for mode.",
+   examples:[
+    {q:"Find the mean of the data: classes 0-10,10-20,20-30 with frequencies 5,10,5 (use midpoints 5,15,25).", steps:["Σfx = 5(5)+10(15)+5(25) = 25+150+125 = 300","Σf = 5+10+5 = 20","Mean = 300/20 = 15"]},
+    {q:"Find the modal class and mode for frequencies: 0-10:5, 10-20:8, 20-30:12, 30-40:6 (mode formula: l+[(f1-f0)/(2f1-f0-f2)]×h).", steps:["Highest frequency=12, modal class=20-30","l=20, f1=12, f0=8, f2=6, h=10","Mode=20+[(12-8)/(24-8-6)]×10 = 20+(4/10)×10 = 24"]}
+   ],
+   problems:[
+    {q:"Find the mean of: classes 10-20,20-30,30-40 with frequencies 3,5,2 (midpoints 15,25,35).", diff:"Direct", steps:["Σfx=3(15)+5(25)+2(35)=45+125+70=240","Σf=10","Mean=240/10=24"]},
+    {q:"Find the median class for cumulative frequencies: up to 10:5, up to 20:15, up to 30:25, up to 40:30 (n=30).", diff:"Medium", steps:["n/2=15","Cumulative frequency reaching 15 is at class 10-20 (cf just before=5, this class's cf=15)","Median class = 10-20"]},
+    {q:"For data with l=25, n/2=20, cf=12, f=8, h=5 find the median.", diff:"Direct", steps:["Median = l+[(n/2-cf)/f]×h","=25+[(20-12)/8]×5=25+5=30"]},
+    {q:"Find the mode of the data: classes 0-20:10, 20-40:35, 40-60:52, 60-80:61, 80-100:38 (find modal class first).", diff:"Medium", steps:["Highest frequency=61, modal class=60-80","l=60,f1=61,f0=52,f2=38,h=20","Mode=60+[(61-52)/(122-52-38)]×20=60+(9/32)×20≈65.6"]},
+    {q:"The mean of 10 observations is 15. If one observation 25 is replaced by 35, find the new mean.", diff:"Word problem", steps:["Original sum=10×15=150","New sum=150-25+35=160","New mean=160/10=16"]},
+    {q:"If the mean and median of a data set are 24 and 26, use the empirical formula to estimate the mode.", diff:"Direct", steps:["Mode = 3×Median - 2×Mean","= 3(26)-2(24) = 78-48 = 30"]}
+   ]}
  ]
 };
 
@@ -367,7 +543,7 @@ function render(){
 
 function renderChapters(main){
   const card=document.createElement('div'); card.className='card';
-  card.innerHTML='<h2>TS SSC Class 10 Maths — Syllabus</h2><p class="soon">Full topic-wise practice is live for Real Numbers, Polynomials & Quadratic Equations — more chapters coming next.</p><div class="grid" id="cg"></div>';
+  card.innerHTML='<h2>TS SSC Class 10 Maths — Syllabus</h2><p class="soon">Every chapter has worked examples and textbook-style practice problems with full step-by-step solutions.</p><div class="grid" id="cg"></div>';
   main.appendChild(card);
   const cg=card.querySelector('#cg');
   CHAPTERS.forEach((c,i)=>{
