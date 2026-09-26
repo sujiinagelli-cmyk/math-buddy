@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TS Maths Buddy - Class 10</title>
+<style>
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --text:#1c1e26; --sub:#5b5f6d;
+  --accent:#5b47e0; --accent2:#00a389; --border:#e4e6ee; --warn:#e0574a;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#14151c; --card:#1d1f2a; --text:#eceef5; --sub:#a3a7b7; --accent:#8b7bff; --accent2:#33c9ab; --border:#2b2e3c; --warn:#ff7a6e; }
+}
+:root[data-theme="dark"]{ --bg:#14151c; --card:#1d1f2a; --text:#eceef5; --sub:#a3a7b7; --accent:#8b7bff; --accent2:#33c9ab; --border:#2b2e3c; --warn:#ff7a6e; }
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
+header{position:sticky;top:0;padding:env(safe-area-inset-top,0px) 16px 0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border);}
+header .in{padding:14px 0 10px;display:flex;align-items:center;justify-content:space-between;max-width:820px;margin:0 auto;}
+h1{font-size:1.15rem;margin:0;} h1 span{color:var(--accent);}
+nav{display:flex;gap:6px;overflow-x:auto;max-width:820px;margin:0 auto;padding-bottom:10px;}
+nav button{flex:none;padding:7px 13px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem;cursor:pointer;}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+main{max-width:820px;margin:0 auto;padding:18px 16px 60px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.chip{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;}
+.chip:hover{border-color:var(--accent);}
+.chip .n{font-size:.7rem;color:var(--sub);}
+.chip .t{font-weight:600;font-size:.92rem;margin-top:3px;}
+.chip .bar{height:5px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden;}
+.chip .bar i{display:block;height:100%;background:var(--accent2);width:0%;}
+h2{font-size:1.05rem;margin:0 0 10px;} h3{font-size:.95rem;margin:14px 0 6px;color:var(--accent);}
+.formula{border-bottom:1px dashed var(--border);padding:8px 0;font-size:.9rem;} .formula b{color:var(--accent);}
+.soon{color:var(--sub);font-size:.8rem;font-style:italic;}
+.back{color:var(--accent);background:none;border:none;font-size:.9rem;cursor:pointer;padding:0 0 12px;}
+button.primary{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:9px;font-size:.9rem;cursor:pointer;}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);padding:10px 16px;border-radius:9px;font-size:.9rem;cursor:pointer;}
+.example{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;font-size:.88rem;}
+.example .lbl{font-weight:600;color:var(--accent2);margin-bottom:4px;}
+.step{padding:3px 0 3px 10px;border-left:2px solid var(--border);margin-left:2px;font-size:.85rem;}
+.problem{border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+.problem .diff{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.03em;}
+.problem .ptext{font-weight:600;margin:6px 0 10px;font-size:.92rem;}
+.solbox{display:none;background:var(--bg);border-radius:10px;padding:12px;margin-top:10px;font-size:.87rem;}
+.selfcheck{display:flex;gap:8px;margin-top:10px;}
+.selfcheck button{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem;cursor:pointer;}
+.selfcheck button.got-it{border-color:var(--accent2);}
+.selfcheck button.missed{border-color:var(--warn);}
+.selfcheck button.picked{opacity:.55;}
+.weakrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--border);}
+.weakrow .acc{font-weight:600;} .acc.low{color:var(--warn);} .acc.mid{color:#d99a2b;} .acc.high{color:var(--accent2);}
+</style>
+</head>
+<body>
+<header>
+  <div class="in"><h1>TS <span>Maths</span> Buddy</h1><span style="font-size:.75rem;color:var(--sub)">Class 10 · SSC</span></div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+
+<script>
+const CHAPTERS = [
+ {id:"realnum", name:"Real Numbers", built:true},
+ {id:"poly", name:"Polynomials", built:true},
+ {id:"quad", name:"Quadratic Equations", built:true},
+ {id:"sets", name:"Sets", built:true},
+ {id:"pairlin", name:"Pair of Linear Equations in Two Variables", built:true},
+ {id:"prog", name:"Progressions", built:true},
+ {id:"coord", name:"Coordinate Geometry", built:true},
+ {id:"simtri", name:"Similar Triangles", built:true},
+ {id:"tangent", name:"Tangents and Secants to a Circle", built:true},
+ {id:"mensur", name:"Mensuration", built:true},
+ {id:"trig", name:"Trigonometry", built:true},
+ {id:"apptrig", name:"Applications of Trigonometry", built:true},
+ {id:"prob", name:"Probability", built:true},
+ {id:"stats", name:"Statistics", built:true}
+];
+
+const FORMULAS = {
+ realnum:[
+  "Euclid's Division Lemma: <b>a = bq + r</b>, 0 ≤ r &lt; b",
+  "Euclid's Division Algorithm: repeatedly apply the lemma to find HCF(a,b)",
+  "Fundamental Theorem of Arithmetic: every composite number can be expressed as a unique product of primes (order aside)",
+  "HCF × LCM = product of the two numbers (for two positive integers a, b)",
+  "If p is prime and p | a², then p | a",
+  "√2, √3, √5, √p (p prime) are all irrational",
+  "Sum or difference of a rational and an irrational number is irrational",
+  "Product of a nonzero rational and an irrational number is irrational",
+  "Terminating decimals: denominator (in lowest form) is of the form 2^m·5^n",
+  "Non-terminating repeating decimals: denominator has prime factors other than 2 or 5"
+ ],
+ poly:[
+  "Degree of polynomial = highest power of the variable",
+  "Linear polynomial ax+b has exactly 1 zero: x=-b/a",
+  "Quadratic p(x)=ax²+bx+c (a≠0): sum of zeroes α+β = -b/a, product αβ = c/a",
+  "Quadratic with zeroes α, β: p(x) = x² - (α+β)x + αβ",
+  "Cubic p(x)=ax³+bx²+cx+d: sum of zeroes = -b/a",
+  "Cubic: sum of products of zeroes taken two at a time = c/a",
+  "Cubic: product of zeroes = -d/a",
+  "Number of zeroes of a polynomial ≤ its degree",
+  "Zeroes of p(x) = x-coordinates where the graph of y=p(x) crosses the x-axis",
+  "Division Algorithm for polynomials: p(x) = g(x)·q(x) + r(x), where degree r(x) &lt; degree g(x)"
+ ],
+ quad:[
+  "Standard form: ax²+bx+c=0, a≠0",
+  "Solving by factorization: split middle term, use zero product rule",
+  "Method of completing the square to derive roots",
+  "Quadratic formula: x = [-b ± √(b²-4ac)] / 2a",
+  "Discriminant D = b² - 4ac",
+  "D &gt; 0: two distinct real roots",
+  "D = 0: two equal real roots (repeated root)",
+  "D &lt; 0: no real roots",
+  "Sum of roots = -b/a, Product of roots = c/a (same as polynomial zero relations)",
+  "For equal roots condition: set D = 0 and solve for the unknown"
+ ],
+ sets:[
+  "Set: a well-defined collection of distinct objects",
+  "n(A) = number of elements in set A (cardinality)",
+  "A ∪ B = elements in A or B or both (union)",
+  "A ∩ B = elements in both A and B (intersection)",
+  "A - B = elements in A but not in B (difference)",
+  "A ⊆ B: A is a subset of B (every element of A is in B)",
+  "A = B if A ⊆ B and B ⊆ A",
+  "Disjoint sets: A ∩ B = ∅",
+  "n(A ∪ B) = n(A) + n(B) - n(A ∩ B)",
+  "n(A ∪ B ∪ C) = n(A)+n(B)+n(C)-n(A∩B)-n(B∩C)-n(A∩C)+n(A∩B∩C)",
+  "Number of subsets of a set with n elements = 2ⁿ",
+  "∅ (empty/null set) has n(∅) = 0"
+ ],
+ pairlin:[
+  "General form: a1x + b1y + c1 = 0 and a2x + b2y + c2 = 0",
+  "Unique solution (intersecting lines): a1/a2 ≠ b1/b2",
+  "No solution (parallel lines): a1/a2 = b1/b2 ≠ c1/c2",
+  "Infinite solutions (coincident lines): a1/a2 = b1/b2 = c1/c2",
+  "Graphical method: plot both lines, solution is the intersection point",
+  "Substitution method: express one variable in terms of the other, substitute into the second equation",
+  "Elimination method: multiply equations to equalize a coefficient, then add/subtract to eliminate a variable",
+  "Cross-multiplication method: x/(b1c2-b2c1) = y/(c1a2-c2a1) = 1/(a1b2-a2b1)"
+ ],
+ prog:[
+  "Arithmetic Progression (AP): a, a+d, a+2d, ... with common difference d",
+  "nth term of AP: aₙ = a + (n-1)d",
+  "Sum of first n terms of AP: Sₙ = n/2 [2a + (n-1)d]",
+  "Sum of first n terms (alt. form): Sₙ = n/2 (a + l), where l is the last term",
+  "d = aₙ - aₙ₋₁ (constant for an AP)",
+  "Geometric Progression (GP): a, ar, ar², ... with common ratio r",
+  "nth term of GP: aₙ = a·r^(n-1)",
+  "Three numbers a, b, c are in AP if 2b = a+c",
+  "Sum of first n natural numbers: n(n+1)/2"
+ ],
+ coord:[
+  "Distance formula: d = √[(x2-x1)² + (y2-y1)²]",
+  "Distance of point (x,y) from origin: √(x²+y²)",
+  "Section formula (internal division in ratio m:n): [(m·x2+n·x1)/(m+n), (m·y2+n·y1)/(m+n)]",
+  "Midpoint formula: [(x1+x2)/2, (y1+y2)/2] (ratio 1:1)",
+  "Centroid of a triangle: [(x1+x2+x3)/3, (y1+y2+y3)/3]",
+  "Area of triangle with vertices (x1,y1),(x2,y2),(x3,y3): ½|x1(y2-y3)+x2(y3-y1)+x3(y1-y2)|",
+  "Collinear points: area of the 'triangle' they form = 0"
+ ],
+ simtri:[
+  "Similar triangles: corresponding angles equal, corresponding sides proportional",
+  "Basic Proportionality Theorem (Thales): a line parallel to one side of a triangle divides the other two sides in the same ratio",
+  "Converse of BPT: if a line divides two sides of a triangle in the same ratio, it is parallel to the third side",
+  "AA similarity criterion: two pairs of equal corresponding angles",
+  "SSS similarity criterion: three pairs of proportional sides",
+  "SAS similarity criterion: one pair of equal angles with sides on either side proportional",
+  "Ratio of areas of similar triangles = (ratio of corresponding sides)² = (ratio of corresponding altitudes)²",
+  "Pythagoras Theorem: in a right triangle, (hypotenuse)² = (side1)² + (side2)²",
+  "Converse of Pythagoras Theorem: if (longest side)² = sum of squares of other two sides, the triangle is right-angled"
+ ],
+ tangent:[
+  "Tangent: a line that touches a circle at exactly one point",
+  "Secant: a line that intersects a circle at two points",
+  "Tangent at any point of a circle is perpendicular to the radius through the point of contact",
+  "From an external point, exactly two tangents can be drawn to a circle",
+  "Lengths of the two tangents from an external point to a circle are equal",
+  "The line joining the external point to the center bisects the angle between the two tangents",
+  "No tangent can be drawn from a point inside the circle; exactly one from a point on the circle"
+ ],
+ mensur:[
+  "Cylinder — CSA = 2πrh, TSA = 2πr(r+h), Volume = πr²h",
+  "Cone — CSA = πrl, TSA = πr(r+l), Volume = ⅓πr²h, slant height l² = r²+h²",
+  "Sphere — Surface Area = 4πr², Volume = 4/3 πr³",
+  "Hemisphere — CSA = 2πr², TSA = 3πr², Volume = 2/3 πr³",
+  "Combination of solids: add/subtract volumes or surface areas of the individual parts as needed",
+  "Frustum of a cone — Volume = ⅓πh(r1²+r2²+r1r2), CSA = πl(r1+r2), slant height l²=h²+(r1-r2)²"
+ ],
+ trig:[
+  "sinθ = opposite/hypotenuse, cosθ = adjacent/hypotenuse, tanθ = opposite/adjacent",
+  "cosecθ = 1/sinθ, secθ = 1/cosθ, cotθ = 1/tanθ",
+  "tanθ = sinθ/cosθ, cotθ = cosθ/sinθ",
+  "Identity: sin²θ + cos²θ = 1",
+  "Identity: 1 + tan²θ = sec²θ",
+  "Identity: 1 + cot²θ = cosec²θ",
+  "Standard values (0°,30°,45°,60°,90°) for sin, cos, tan, cosec, sec, cot",
+  "sin(90°-θ)=cosθ, cos(90°-θ)=sinθ, tan(90°-θ)=cotθ (complementary angles)"
+ ],
+ apptrig:[
+  "Line of sight: the line from the observer's eye to the object",
+  "Angle of elevation: angle between the horizontal and the line of sight when looking up",
+  "Angle of depression: angle between the horizontal and the line of sight when looking down",
+  "height = horizontal distance × tan(angle of elevation)",
+  "horizontal distance = height / tan(angle of elevation)",
+  "Angle of elevation from point A to B equals angle of depression from B to A (alternate angles)"
+ ],
+ prob:[
+  "Probability of an event: P(E) = (number of favourable outcomes) / (total number of outcomes)",
+  "0 ≤ P(E) ≤ 1 for any event E",
+  "P(sure/certain event) = 1",
+  "P(impossible event) = 0",
+  "P(E) + P(not E) = 1, i.e. P(not E) = 1 - P(E)",
+  "Equally likely outcomes: each outcome has the same chance of occurring",
+  "For a single die: total outcomes = 6. For two coins: total outcomes = 4. For a deck of cards: total outcomes = 52"
+ ],
+ stats:[
+  "Mean (direct method): x̄ = Σfx / Σf",
+  "Mean (assumed mean method): x̄ = a + Σfd/Σf, where d = x - a",
+  "Mean (step deviation method): x̄ = a + (Σfu/Σf)×h, where u = (x-a)/h",
+  "Median (grouped data): l + [(n/2 - cf)/f] × h, using the cumulative frequency table",
+  "Mode (grouped data): l + [(f1-f0)/(2f1-f0-f2)] × h",
+  "Empirical relationship: Mode = 3×Median - 2×Mean",
+  "Class mark (mid-value) = (lower limit + upper limit) / 2",
+  "Cumulative frequency (ogive) curve used to find median and quartiles graphically"
+ ]
+};
+
+// TOPICS: fully built practice content (concept, formula, worked examples, practice problem pool)
+const TOPICS = {
+ realnum: [
+  {id:"euclid", name:"Euclid's Division Lemma & HCF",
+   concept:"For any two positive integers a and b, a = bq + r where 0 ≤ r < b. Repeated application (Euclid's algorithm) finds the HCF.",
+   examples:[
+    {q:"Find HCF of 135 and 225 using Euclid's algorithm.", steps:["225 = 135×1 + 90","135 = 90×1 + 45","90 = 45×2 + 0","Remainder is 0, so HCF = 45"]},
+    {q:"Find HCF of 196 and 38220.", steps:["38220 = 196×195 + 0","Since remainder is already 0, HCF = 196"]}
+   ],
+   problems:[
+    {q:"Find the HCF of 96 and 404 using Euclid's division algorithm.", diff:"Direct", steps:["404 = 96×4 + 20","96 = 20×4 + 16","20 = 16×1 + 4","16 = 4×4 + 0","HCF = 4"]},
+    {q:"Find the HCF of 4052 and 12576 using Euclid's algorithm.", diff:"Direct", steps:["12576 = 4052×3 + 420","4052 = 420×9 + 272","420 = 272×1 + 148","272 = 148×1 + 124","148 = 124×1 + 24","124 = 24×5 + 4","24 = 4×6 + 0","HCF = 4"]},
+    {q:"Use Euclid's algorithm to find HCF of 210 and 55, and express it as 210x + 55y.", diff:"Medium", steps:["210 = 55×3 + 45","55 = 45×1 + 10","45 = 10×4 + 5","10 = 5×2 + 0 → HCF = 5","Back-substitute: 5 = 45 - 10×4","10 = 55-45, so 5 = 45-4(55-45)=5×45-4×55","45=210-3×55, so 5=5(210-3×55)-4×55=5×210-19×55"]},
+    {q:"Show that every positive even integer is of the form 2q, and every odd integer is of the form 2q+1.", diff:"Medium", steps:["By Euclid's lemma, a=bq+r with b=2, so r=0 or r=1","If r=0: a=2q (even)","If r=1: a=2q+1 (odd)","This covers every integer as either even or odd"]},
+    {q:"An army contingent of 616 members marches behind an army band of 32 members in columns. Find max columns in which they can march.", diff:"Word problem", steps:["Need HCF(616,32)","616=32×19+8","32=8×4+0","HCF=8","Maximum number of columns = 8"]},
+    {q:"Find HCF of 867 and 255.", diff:"Direct", steps:["867=255×3+102","255=102×2+51","102=51×2+0","HCF=51"]}
+   ]},
+  {id:"irrational", name:"Proving Numbers Irrational",
+   concept:"To prove √p is irrational (p prime), use proof by contradiction: assume √p = a/b in lowest terms, derive that both a and b share a common factor p — a contradiction.",
+   examples:[
+    {q:"Prove that √2 is irrational.", steps:["Assume √2 = a/b, where a,b are coprime integers, b≠0","Then 2 = a²/b² → a² = 2b²","So a² is even → a is even. Let a=2c","Then 4c² = 2b² → b² = 2c² → b is even too","But a,b can't both be even if coprime — contradiction","So √2 is irrational"]}
+   ],
+   problems:[
+    {q:"Prove that √3 is irrational.", diff:"Direct", steps:["Assume √3=a/b in lowest terms","3b²=a² → a² divisible by 3 → a divisible by 3, let a=3c","3b²=9c² → b²=3c² → b divisible by 3","Both a,b divisible by 3 contradicts 'lowest terms'","So √3 is irrational"]},
+    {q:"Prove that 5 - √3 is irrational.", diff:"Medium", steps:["Assume 5-√3 is rational, say = r","Then √3 = 5-r, a rational number (difference of rationals)","But √3 is irrational (proven) — contradiction","So 5-√3 is irrational"]},
+    {q:"Prove that 3 + 2√5 is irrational.", diff:"Medium", steps:["Assume 3+2√5 is rational = r","Then 2√5 = r-3, so √5=(r-3)/2, rational","But √5 is irrational — contradiction","So 3+2√5 is irrational"]},
+    {q:"Prove that 1/√2 is irrational.", diff:"Direct", steps:["Assume 1/√2 = a/b (rational, lowest terms)","Then √2 = b/a, a rational number","But √2 is irrational — contradiction","So 1/√2 is irrational"]},
+    {q:"Prove √5 is irrational.", diff:"Direct", steps:["Assume √5=a/b in lowest terms","5b²=a² → a divisible by 5, let a=5c","5b²=25c² → b²=5c² → b divisible by 5","Contradicts lowest terms; so √5 irrational"]}
+   ]}
+ ],
+ poly: [
+  {id:"zeroesrel", name:"Zeroes & Coefficient Relationships",
+   concept:"For a quadratic ax²+bx+c: sum of zeroes = -b/a, product = c/a. Use these to find zeroes or verify given zeroes without full factorization.",
+   examples:[
+    {q:"Find the zeroes of x²-2x-8 and verify the relationship with coefficients.", steps:["x²-2x-8 = (x-4)(x+2)","Zeroes: x=4, x=-2","Sum = 4+(-2)=2 = -(-2)/1 = 2 ✓","Product = 4×(-2)=-8 = -8/1 ✓"]},
+    {q:"If zeroes of a quadratic are 3 and -2, form the polynomial.", steps:["Sum = 3+(-2)=1, Product = 3×(-2)=-6","Polynomial: x²-(sum)x+(product) = x²-x-6"]}
+   ],
+   problems:[
+    {q:"Find the zeroes of 6x²-3-7x and verify the relationship between zeroes and coefficients.", diff:"Direct", steps:["6x²-7x-3=0","6x²-9x+2x-3=0 → 3x(2x-3)+1(2x-3)=0 → (3x+1)(2x-3)=0","Zeroes: x=-1/3, x=3/2","Sum=-1/3+3/2=7/6 = -(-7)/6 ✓","Product=-1/3×3/2=-1/2=-3/6 ✓ (c/a=-3/6)"]},
+    {q:"Find a quadratic polynomial whose sum and product of zeroes are √2 and -3/2.", diff:"Direct", steps:["Polynomial form: x²-(sum)x+product","= x²-√2x-3/2","Multiply by 2: 2x²-2√2x-3"]},
+    {q:"If one zero of the polynomial x²-4x+1 is 2+√3, find the other zero.", diff:"Medium", steps:["Sum of zeroes = 4 (= -(-4)/1)","Other zero = 4-(2+√3) = 2-√3"]},
+    {q:"Verify that 3, -1, -1/3 are zeroes of 3x³-5x²-11x-3, and check the relation to coefficients.", diff:"Medium", steps:["Check each: p(3)=81-45-33-3=0 ✓ p(-1)=-3-5+11-3=0 ✓ p(-1/3)=3(-1/27)-5(1/9)+11/3-3 = 0 ✓","Sum=3-1-1/3=5/3=-(-5)/3 ✓","Sum of products two at a time = 3(-1)+(-1)(-1/3)+3(-1/3)=-3+1/3-1=-11/3=c/a ✓","Product=3×-1×-1/3=1=-(-3)/3 ✓"]},
+    {q:"Find zeroes of 4x²+8x and verify the relationships.", diff:"Direct", steps:["4x²+8x=4x(x+2)=0","Zeroes: x=0, x=-2","Sum=-2=-8/4 ✓ Product=0=0/4 ✓"]},
+    {q:"If the sum of zeroes of kx²+2x+3k is equal to their product, find k.", diff:"Word problem", steps:["Sum=-2/k, Product=3k/k=3","Set equal: -2/k=3 → k=-2/3"]}
+   ]},
+  {id:"formpoly", name:"Forming Polynomials from Zeroes",
+   concept:"Given zeroes (or a relation between them), build the polynomial using x²-(sum)x+(product) for quadratics, and the general cubic pattern for degree 3.",
+   examples:[
+    {q:"Form a quadratic polynomial with zeroes 1/4 and -1.", steps:["Sum=1/4-1=-3/4, Product=1/4×-1=-1/4","Polynomial: x²+3/4x-1/4, or 4x²+3x-1 (clearing fractions)"]}
+   ],
+   problems:[
+    {q:"Find a quadratic polynomial with sum of zeroes -3 and product 2.", diff:"Direct", steps:["x²-(sum)x+product = x²-(-3)x+2 = x²+3x+2"]},
+    {q:"Find a quadratic polynomial with zeroes √2 and 1/√2.", diff:"Medium", steps:["Sum=√2+1/√2 = 3/√2, Product=√2×1/√2=1","Polynomial: x²-(3/√2)x+1 → multiply by √2: √2x²-3x+√2"]},
+    {q:"If α and β are zeroes of x²-5x+6, form a polynomial with zeroes 1/α and 1/β.", diff:"Word problem", steps:["α+β=5, αβ=6","New sum = 1/α+1/β=(α+β)/αβ=5/6","New product=1/(αβ)=1/6","Polynomial: x²-(5/6)x+1/6, or 6x²-5x+1"]},
+    {q:"Form a quadratic polynomial with zeroes 0 and 5.", diff:"Direct", steps:["Sum=5, Product=0","Polynomial: x²-5x"]},
+    {q:"Find a quadratic polynomial with sum of zeroes 8 and product 12; hence find the zeroes.", diff:"Medium", steps:["Polynomial: x²-8x+12","Factor: (x-2)(x-6)=0","Zeroes: x=2, x=6"]}
+   ]}
+ ],
+ quad: [
+  {id:"factorize", name:"Solving by Factorization",
+   concept:"Split the middle term so the quadratic factors into two linear factors, then use the zero product rule.",
+   examples:[
+    {q:"Solve x²-3x-10=0 by factorization.", steps:["Find two numbers multiplying to -10, adding to -3: -5 and 2","x²-5x+2x-10=0 → x(x-5)+2(x-5)=0 → (x-5)(x+2)=0","x=5 or x=-2"]},
+    {q:"Solve 2x²+7x+3=0 by factorization.", steps:["Product=2×3=6, need two numbers multiplying to 6, adding to 7: 6 and 1","2x²+6x+x+3=0 → 2x(x+3)+1(x+3)=0 → (2x+1)(x+3)=0","x=-1/2 or x=-3"]}
+   ],
+   problems:[
+    {q:"Solve x²-7x+12=0 by factorization.", diff:"Direct", steps:["Need numbers multiplying to 12, adding to -7: -3,-4","(x-3)(x-4)=0","x=3 or x=4"]},
+    {q:"Solve 3x²-5x+2=0 by factorization.", diff:"Direct", steps:["Product=6, sum=-5: -3,-2","3x²-3x-2x+2=0 → 3x(x-1)-2(x-1)=0 → (3x-2)(x-1)=0","x=2/3 or x=1"]},
+    {q:"The product of two consecutive positive integers is 306. Find the integers.", diff:"Word problem", steps:["Let integers be x, x+1: x(x+1)=306","x²+x-306=0 → (x-17)(x+18)=0","x=17 (reject -18, not positive)","Integers: 17 and 18"]},
+    {q:"Solve 100x²-20x+1=0.", diff:"Medium", steps:["Product=100, sum=-20: -10,-10","100x²-10x-10x+1=0 → 10x(10x-1)-1(10x-1)=0 → (10x-1)²=0","x=1/10 (repeated root)"]},
+    {q:"A cottage industry produces x articles in a day costing (2x+3) rupees each; total production cost is ₹90. Find x.", diff:"Word problem", steps:["x(2x+3)=90 → 2x²+3x-90=0","Product=-180, sum=3: 15,-12","2x²+15x-12x-90=0 → x(2x+15)-6(2x+15)=0 → (2x+15)(x-6)=0","x=6 (reject negative)"]},
+    {q:"Solve √2x²+7x+5√2=0.", diff:"Medium", steps:["Product=√2×5√2=10, sum=7: 5,2","√2x²+5x+2x+5√2=0 → x(√2x+5)+√2(x×2/√2+5)... simpler: √2x²+2x+5x+5√2=0 → √2x(x+√2×2/√2)...","Group: (√2x+5)(x+√2)=0","x=-5/√2 or x=-√2"]}
+   ]},
+  {id:"formula", name:"Solving by the Quadratic Formula",
+   concept:"For ax²+bx+c=0, x = [-b ± √(b²-4ac)] / 2a. Use this when factorization isn't obvious.",
+   examples:[
+    {q:"Solve 2x²-5x+3=0 using the quadratic formula.", steps:["a=2,b=-5,c=3. D=25-24=1","x=(5±1)/4","x=6/4=3/2 or x=4/4=1"]}
+   ],
+   problems:[
+    {q:"Solve x²+4x-5=0 using the quadratic formula.", diff:"Direct", steps:["a=1,b=4,c=-5. D=16+20=36","x=(-4±6)/2","x=1 or x=-5"]},
+    {q:"Solve 4x²-4x+1=0 using the quadratic formula.", diff:"Direct", steps:["a=4,b=-4,c=1. D=16-16=0","x=4/8=1/2 (repeated root)"]},
+    {q:"A train travels 360km at a uniform speed. If speed had been 5km/h more, it would take 1 hour less. Find the speed.", diff:"Word problem", steps:["Let speed=x. Time=360/x. New time=360/(x+5)","360/x - 360/(x+5) = 1","360(x+5-x)=x(x+5) → 1800=x²+5x → x²+5x-1800=0","x=(-5±√(25+7200))/2=(-5±85)/2","x=40 (reject negative)"]},
+    {q:"Solve 2x²-7x+3=0 using the quadratic formula.", diff:"Medium", steps:["a=2,b=-7,c=3. D=49-24=25","x=(7±5)/4","x=3 or x=1/2"]},
+    {q:"Find two numbers whose sum is 27 and product is 182.", diff:"Word problem", steps:["Let numbers be x, 27-x: x(27-x)=182","27x-x²=182 → x²-27x+182=0","D=729-728=1","x=(27±1)/2 = 14 or 13"]}
+   ]},
+  {id:"nature", name:"Nature of Roots (Discriminant)",
+   concept:"D=b²-4ac. D>0: two distinct real roots. D=0: equal real roots. D<0: no real roots. Used to find conditions on unknowns.",
+   examples:[
+    {q:"Find the value of k for which x²-kx+4=0 has equal roots.", steps:["D=k²-16=0 for equal roots","k²=16 → k=±4"]}
+   ],
+   problems:[
+    {q:"Find the nature of roots of 2x²-3x+5=0 without solving.", diff:"Direct", steps:["D=9-40=-31","Since D<0, no real roots"]},
+    {q:"Find k so that kx(x-2)+6=0 has two equal roots.", diff:"Medium", steps:["kx²-2kx+6=0. D=4k²-24k=0","4k(k-6)=0 → k=0 or k=6","k=0 makes it not quadratic, so k=6"]},
+    {q:"Is it possible to design a rectangular park of perimeter 80m and area 400m²? Use discriminant to check.", diff:"Word problem", steps:["Let length=x. Width=(40-x). Area=x(40-x)=400","40x-x²=400 → x²-40x+400=0","D=1600-1600=0","D=0, so yes — a unique rectangle (a square of side 20m) is possible"]},
+    {q:"Find the values of k for which x²+k(2x+k-1)+2=0 has real and equal roots.", diff:"Medium", steps:["x²+2kx+k²-k+2=0","D=4k²-4(k²-k+2)=0 → 4k-8=0 → k=2"]}
+   ]}
+ ],
+ sets: [
+  {id:"setops", name:"Set Operations (Union, Intersection, Difference)",
+   concept:"Union combines elements, intersection keeps only shared elements, and difference removes elements of one set from another. n(A∪B)=n(A)+n(B)-n(A∩B) links their sizes.",
+   examples:[
+    {q:"If A={1,2,3,4}, B={3,4,5,6}, find A∪B, A∩B, A-B.", steps:["A∪B = {1,2,3,4,5,6}","A∩B = {3,4}","A-B = {1,2}"]},
+    {q:"In a class of 50, 30 like Maths, 25 like Science, 15 like both. Find how many like at least one subject.", steps:["n(M∪S)=n(M)+n(S)-n(M∩S)","= 30+25-15 = 40","40 students like at least one subject"]}
+   ],
+   problems:[
+    {q:"If A={a,b,c,d}, B={b,d,f}, find A∪B and A∩B.", diff:"Direct", steps:["A∪B = {a,b,c,d,f}","A∩B = {b,d}"]},
+    {q:"If A={2,4,6,8,10}, B={4,8,12}, find A-B and B-A.", diff:"Direct", steps:["A-B = {2,6,10} (in A, not B)","B-A = {12} (in B, not A)"]},
+    {q:"In a survey of 100 people, 60 read newspaper X, 40 read newspaper Y, 20 read both. How many read neither?", diff:"Word problem", steps:["n(X∪Y)=60+40-20=80","People reading neither = 100-80 = 20"]},
+    {q:"If n(A)=20, n(B)=28, n(A∪B)=36, find n(A∩B).", diff:"Medium", steps:["n(A∩B)=n(A)+n(B)-n(A∪B)","=20+28-36=12"]},
+    {q:"If U={1..10}, A={2,4,6,8,10}, find A' (complement of A in U).", diff:"Medium", steps:["A' = elements in U but not in A","A' = {1,3,5,7,9}"]},
+    {q:"Out of 120 students, 80 play cricket, 60 play football, 40 play both. How many play only cricket?", diff:"Word problem", steps:["Only cricket = n(C)-n(C∩F) = 80-40 = 40 students"]}
+   ]}
+ ],
+ pairlin: [
+  {id:"wordprob", name:"Solving Word Problems using Pair of Equations",
+   concept:"Translate the word problem into two linear equations by assigning variables to the unknown quantities, then solve using substitution, elimination, or cross-multiplication.",
+   examples:[
+    {q:"The sum of two numbers is 8 and their difference is 2. Find the numbers.", steps:["Let numbers be x, y: x+y=8, x-y=2","Adding: 2x=10 → x=5","Then y=8-5=3","Numbers are 5 and 3"]},
+    {q:"5 years ago, a father was 7 times as old as his son. 5 years hence, he will be 3 times as old. Find their present ages.", steps:["Let father=x, son=y (present ages)","(x-5)=7(y-5) → x-7y=-30","(x+5)=3(y+5) → x-3y=10","Subtract: -4y=-40 → y=10, then x=40"]}
+   ],
+   problems:[
+    {q:"The sum of the ages of a father and son is 45 years. 5 years ago, father's age was 4 times son's age. Find their present ages.", diff:"Word problem", steps:["x+y=45. (x-5)=4(y-5) → x-4y=-15","Subtract from x+y=45: 5y=60 → y=12, x=33"]},
+    {q:"A fraction becomes 1/3 when 2 is subtracted from numerator and denominator; it becomes 1/2 when 1 is added to both. Find the fraction.", diff:"Medium", steps:["Let fraction=x/y","(x-2)/(y-2)=1/3 → 3x-y=4","(x+1)/(y+1)=1/2 → 2x-y=-1","Subtract: x=5, then y=11. Fraction=5/11"]},
+    {q:"2 tables and 3 chairs cost ₹2000; 3 tables and 2 chairs cost ₹2500. Find the cost of each.", diff:"Word problem", steps:["2x+3y=2000, 3x+2y=2500","Multiply first by 3, second by 2: 6x+9y=6000, 6x+4y=5000","Subtract: 5y=1000 → y=200, then x=700"]},
+    {q:"Solve graphically-style: x+y=6, 2x-y=3 (solve algebraically).", diff:"Direct", steps:["Add: 3x=9 → x=3, then y=3"]},
+    {q:"The sum of a two-digit number and the number formed by reversing its digits is 66. The digits differ by 2. Find the number.", diff:"Word problem", steps:["Let digits be x,y: number=10x+y","(10x+y)+(10y+x)=66 → 11(x+y)=66 → x+y=6","x-y=2 (assume x>y)","Adding: 2x=8 → x=4, y=2. Number=42"]},
+    {q:"7 pens and 5 pencils cost ₹58; 5 pens and 7 pencils cost ₹50. Find the cost of a pen and a pencil.", diff:"Medium", steps:["7x+5y=58, 5x+7y=50","Multiply first by 7, second by 5: 49x+35y=406, 25x+35y=250","Subtract: 24x=156 → x=6.5... check: 24x=156, x=6.5, then y=(58-45.5)/5=2.5"]}
+   ]}
+ ],
+ prog: [
+  {id:"apterms", name:"AP — nth Term and Sum of n Terms",
+   concept:"Use aₙ=a+(n-1)d to find any term, and Sₙ=n/2[2a+(n-1)d] to find the sum of the first n terms of an arithmetic progression.",
+   examples:[
+    {q:"Find the 20th term of the AP 3, 7, 11, 15, ...", steps:["a=3, d=4","a20 = 3+(20-1)×4 = 3+76 = 79"]},
+    {q:"Find the sum of the first 15 terms of the AP 2, 5, 8, 11, ...", steps:["a=2, d=3, n=15","S15 = 15/2[2(2)+(14)(3)] = 15/2[4+42] = 15/2×46 = 345"]}
+   ],
+   problems:[
+    {q:"Find the 25th term of the AP 10, 7, 4, 1, ...", diff:"Direct", steps:["a=10, d=-3","a25=10+24(-3)=10-72=-62"]},
+    {q:"How many terms of the AP 9, 17, 25, ... must be taken to give a sum of 636?", diff:"Medium", steps:["a=9, d=8. Sn=636","636=n/2[18+(n-1)8]","636=n/2[8n+10] → 1272=8n²+10n","8n²+10n-1272=0 → 4n²+5n-636=0","Solve: n=(-5±√(25+10176))/8=(-5±101)/8 → n=12"]},
+    {q:"Find the sum of first 22 terms of AP with a=8, common difference d=3.", diff:"Direct", steps:["S22=22/2[2(8)+21(3)]=11[16+63]=11×79=869"]},
+    {q:"The 3rd term of an AP is 16, and the 7th term exceeds the 5th term by 12. Find the AP.", diff:"Word problem", steps:["a+2d=16","(a+6d)-(a+4d)=12 → 2d=12 → d=6","a=16-12=4","AP: 4,10,16,22,..."]},
+    {q:"Find the sum of first 40 positive integers divisible by 6.", diff:"Word problem", steps:["AP: 6,12,18,... a=6,d=6,n=40","S40=40/2[2(6)+39(6)]=20[12+234]=20×246=4920"]},
+    {q:"Which term of the AP 21, 18, 15, ... is -81?", diff:"Medium", steps:["a=21,d=-3. aₙ=-81","21+(n-1)(-3)=-81 → -3(n-1)=-102 → n-1=34 → n=35"]}
+   ]}
+ ],
+ coord: [
+  {id:"distarea", name:"Distance, Section Formula & Area of Triangle",
+   concept:"Distance formula finds the length between two points; section formula finds a point dividing a segment in a ratio; the area formula finds a triangle's area from its three vertices.",
+   examples:[
+    {q:"Find the point which divides the line segment joining (4,-3) and (8,5) in the ratio 3:1.", steps:["Using section formula with m=3,n=1","x=(3×8+1×4)/4=28/4=7","y=(3×5+1×(-3))/4=12/4=3","Point: (7,3)"]},
+    {q:"Find the area of the triangle with vertices (1,-1), (-4,6), (-3,-5).", steps:["Area=½|1(6-(-5))+(-4)(-5-(-1))+(-3)(-1-6)|","=½|1(11)+(-4)(-4)+(-3)(-7)|","=½|11+16+21|=½(48)=24"]}
+   ],
+   problems:[
+    {q:"Find the distance between points (2,3) and (4,1).", diff:"Direct", steps:["√((4-2)²+(1-3)²)=√(4+4)=√8=2√2"]},
+    {q:"Find the point on the x-axis equidistant from (2,-5) and (-2,9).", diff:"Medium", steps:["Point on x-axis: (x,0)","(x-2)²+25=(x+2)²+81","x²-4x+4+25=x²+4x+4+81","-4x+29=4x+85 → -8x=56 → x=-7","Point: (-7,0)"]},
+    {q:"Find the ratio in which the point (-1,6) divides the segment joining (-3,10) and (6,-8).", diff:"Medium", steps:["Let ratio=k:1. x=(6k-3)/(k+1)=-1","6k-3=-k-1 → 7k=2 → k=2/7","Ratio = 2:7"]},
+    {q:"Find the area of the triangle with vertices (0,0), (6,0), (0,8).", diff:"Direct", steps:["Area=½|0(0-8)+6(8-0)+0(0-0)|=½|48|=24"]},
+    {q:"Show that points (1,1), (2,3), (4,7) are collinear.", diff:"Medium", steps:["Area=½|1(3-7)+2(7-1)+4(1-3)|","=½|-4+12-8|=½(0)=0","Area=0 means the points are collinear"]},
+    {q:"Find the coordinates of the midpoint of the segment joining (-6,7) and (8,-5).", diff:"Direct", steps:["Midpoint=((-6+8)/2,(7-5)/2)=(1,1)"]}
+   ]}
+ ],
+ simtri: [
+  {id:"bptpyth", name:"Basic Proportionality Theorem & Pythagoras Theorem",
+   concept:"BPT: a line parallel to one side of a triangle divides the other two sides proportionally. Pythagoras: in a right triangle, hypotenuse²=sum of squares of the other two sides.",
+   examples:[
+    {q:"In ΔABC, DE∥BC, AD=2cm, DB=3cm, AE=3cm. Find EC.", steps:["By BPT: AD/DB=AE/EC","2/3=3/EC → EC=9/2=4.5cm"]},
+    {q:"A ladder 17m long reaches a window 15m above the ground. Find the distance of the foot of the ladder from the wall.", steps:["Hypotenuse=17, height=15","base²=17²-15²=289-225=64","base=8m"]}
+   ],
+   problems:[
+    {q:"In ΔABC, DE∥BC. If AD=4, DB=6, AE=5, find EC.", diff:"Direct", steps:["AD/DB=AE/EC → 4/6=5/EC","EC=(5×6)/4=7.5"]},
+    {q:"A right triangle has legs 9cm and 12cm. Find the hypotenuse.", diff:"Direct", steps:["h=√(9²+12²)=√(81+144)=√225=15cm"]},
+    {q:"Two poles of height 6m and 11m stand 12m apart. Find the distance between their tops.", diff:"Word problem", steps:["Height difference=5m, horizontal distance=12m","Distance=√(5²+12²)=√(25+144)=√169=13m"]},
+    {q:"In ΔABC, D and E are points on AB and AC such that DE∥BC. If AD/DB=3/5, and AC=16, find AE.", diff:"Medium", steps:["AE/EC=3/5, and AE+EC=16","AE=3k, EC=5k → 8k=16 → k=2","AE=6"]},
+    {q:"A man goes 15m due east then 20m due north. Find his distance from the starting point.", diff:"Word problem", steps:["Distance=√(15²+20²)=√(225+400)=√625=25m"]},
+    {q:"Prove: in a right triangle, the square of the hypotenuse equals the sum of squares of the other two sides, for a 6-8-10 triangle.", diff:"Direct", steps:["Check: 6²+8²=36+64=100","10²=100","Confirms Pythagoras theorem holds"]}
+   ]}
+ ],
+ tangent: [
+  {id:"tanglen", name:"Tangent Length & Tangent Theorems",
+   concept:"Use the fact that a tangent is perpendicular to the radius, and that two tangents from an external point are equal in length, to solve for unknown lengths and angles.",
+   examples:[
+    {q:"From a point Q, the length of tangent to a circle of radius 5cm is 12cm. Find the distance OQ (O=center).", steps:["Tangent⊥radius, so OQ²=OT²+QT²","OQ²=5²+12²=25+144=169","OQ=13cm"]},
+    {q:"PA and PB are tangents from an external point P to a circle with center O. If ∠APB=60°, find ∠AOB.", steps:["OAPB forms a kite; ∠OAP=∠OBP=90°","Sum of angles in quadrilateral=360°","∠AOB=360-90-90-60=120°"]}
+   ],
+   problems:[
+    {q:"A tangent PQ at a point P of a circle of radius 5cm meets a line through center O at Q, such that OQ=12cm. Find PQ.", diff:"Direct", steps:["PQ²=OQ²-OP²=144-25=119","PQ=√119 ≈ 10.9cm"]},
+    {q:"Two concentric circles have radii 5cm and 3cm. Find the length of the chord of the larger circle which touches the smaller circle.", diff:"Medium", steps:["Half-chord²=5²-3²=25-9=16","Half-chord=4, full chord=8cm"]},
+    {q:"PA and PB are tangents to a circle from external point P, with PA=10cm. Find PB and explain why.", diff:"Direct", steps:["Tangents from the same external point are equal","PB=10cm (by tangent-length theorem)"]},
+    {q:"A circle is inscribed in a triangle with sides 8,6,10cm touching all sides. Find the radius (right triangle).", diff:"Word problem", steps:["Check right triangle: 6²+8²=36+64=100=10² ✓","r=(a+b-c)/2 for right triangle=(6+8-10)/2=2cm"]},
+    {q:"In a circle of radius 7cm, tangent PT is drawn from point P where OP=25cm. Find the length of the tangent PT.", diff:"Direct", steps:["PT²=OP²-OT²=625-49=576","PT=24cm"]},
+    {q:"If tangents PA and PB from point P to a circle with center O are inclined to each other at 80°, find ∠POA.", diff:"Medium", steps:["OA⊥PA, so ∠OAP=90°","In triangle OAP: ∠AOP+∠OAP+∠APO=180","∠APO=40° (half of 80°, by symmetry)","∠AOP=180-90-40=50°"]}
+   ]}
+ ],
+ mensur: [
+  {id:"combsolids", name:"Volume & Surface Area of Combined Solids",
+   concept:"For solids made of two or more basic shapes joined together, add/subtract the relevant volumes or surface areas of the individual parts — don't double count the joined faces.",
+   examples:[
+    {q:"A cylinder of radius 7cm and height 10cm has a cone of the same radius and height 3cm on top. Find the total volume. (π=22/7)", steps:["Cylinder vol=πr²h=22/7×49×10=1540 cm³","Cone vol=⅓πr²h=⅓×22/7×49×3=154 cm³","Total=1540+154=1694 cm³"]},
+    {q:"A solid is a hemisphere of radius 3.5cm mounted on a cylinder of the same radius and height 6cm. Find total surface area. (π=22/7)", steps:["Cylinder CSA=2πrh=2×22/7×3.5×6=132cm²","Cylinder base (bottom only, circle)=πr²=22/7×12.25=38.5cm²","Hemisphere CSA=2πr²=2×38.5=77cm²","Total TSA=132+38.5+77=247.5cm²"]}
+   ],
+   problems:[
+    {q:"A toy is a cone of height 12cm and radius 3cm mounted on a hemisphere of the same radius. Find total volume. (π=22/7)", diff:"Word problem", steps:["Cone vol=⅓πr²h=⅓×22/7×9×12=113.14cm³ approx","Hemisphere vol=⅔πr³=⅔×22/7×27=56.57cm³ approx","Total≈169.7cm³"]},
+    {q:"A cylindrical tank has radius 6m, height 10m. Find its volume. (π=3.14)", diff:"Direct", steps:["V=πr²h=3.14×36×10=1130.4 m³"]},
+    {q:"A solid sphere of radius 6cm is melted and recast into small spheres of radius 1cm. Find the number of small spheres.", diff:"Medium", steps:["Volume conserved: (4/3)π(6)³=n×(4/3)π(1)³","216=n → n=216 spheres"]},
+    {q:"A cone of radius 5cm and height 12cm has its slant surface area calculated. Find the slant height and CSA. (π=3.14)", diff:"Direct", steps:["l=√(r²+h²)=√(25+144)=13cm","CSA=πrl=3.14×5×13=204.1cm²"]},
+    {q:"Water in a cylindrical container (radius 6cm, height 15cm, full) is poured into a cone of radius 6cm, height 15cm. Will it overflow?", diff:"Word problem", steps:["Cylinder vol=πr²h=π(36)(15)=540π","Cone vol=⅓πr²h=⅓π(36)(15)=180π","Cylinder volume is 3× the cone volume, so yes, it will overflow"]},
+    {q:"Find the volume of a hemisphere of diameter 21cm. (π=22/7)", diff:"Direct", steps:["r=10.5cm","V=⅔πr³=⅔×22/7×1157.6≈2425.5cm³"]}
+   ]}
+ ],
+ trig: [
+  {id:"identities", name:"Trigonometric Identities & Evaluating Expressions",
+   concept:"Use sin²θ+cos²θ=1, 1+tan²θ=sec²θ, and 1+cot²θ=cosec²θ to simplify expressions or prove identities, without needing standard angle values.",
+   examples:[
+    {q:"Prove that (1-cos²θ)/sin²θ = 1.", steps:["1-cos²θ = sin²θ (from the identity)","So (1-cos²θ)/sin²θ = sin²θ/sin²θ = 1"]},
+    {q:"Evaluate sin²30°+cos²30°.", steps:["This equals 1 for any angle by the identity sin²θ+cos²θ=1","Answer: 1"]}
+   ],
+   problems:[
+    {q:"Prove: (secθ-tanθ)(secθ+tanθ) = 1.", diff:"Direct", steps:["= sec²θ-tan²θ (difference of squares)","= 1 (from identity 1+tan²θ=sec²θ, so sec²θ-tan²θ=1)"]},
+    {q:"If sinθ=12/13, find cosθ and tanθ (θ acute).", diff:"Direct", steps:["cos²θ=1-sin²θ=1-144/169=25/169","cosθ=5/13","tanθ=sinθ/cosθ=12/5"]},
+    {q:"Prove: (1+tan²A)/(1+cot²A) = tan²A.", diff:"Medium", steps:["1+tan²A=sec²A, 1+cot²A=cosec²A","sec²A/cosec²A = (1/cos²A)/(1/sin²A) = sin²A/cos²A = tan²A"]},
+    {q:"Simplify: sinθcosecθ - cosθsecθ + tan²θ-sec²θ.", diff:"Medium", steps:["sinθ×(1/sinθ)=1, cosθ×(1/cosθ)=1","1-1 + (tan²θ-sec²θ) = 0 + (-1) [since sec²θ-tan²θ=1]","= -1"]},
+    {q:"If cosA=7/25, find sinA and tanA.", diff:"Direct", steps:["sin²A=1-49/625=576/625","sinA=24/25","tanA=24/7"]},
+    {q:"Prove: cosecθ - cotθ = sinθ/(1+cosθ).", diff:"Medium", steps:["LHS=1/sinθ - cosθ/sinθ = (1-cosθ)/sinθ","Multiply RHS by (1-cosθ)/(1-cosθ): sinθ(1-cosθ)/(1-cos²θ)=sinθ(1-cosθ)/sin²θ=(1-cosθ)/sinθ","Both sides equal (1-cosθ)/sinθ ✓"]}
+   ]}
+ ],
+ apptrig: [
+  {id:"heightsdist", name:"Heights and Distances Word Problems",
+   concept:"Draw a right triangle from the given elevation/depression angle, identify the known side (usually the horizontal distance or height), and use the correct trig ratio (tan usually) to solve for the unknown.",
+   examples:[
+    {q:"A tower stands 100m from an observer. The angle of elevation to its top is 30°. Find the height of the tower.", steps:["tan30° = height/100","height = 100×tan30° = 100×(1/√3) = 100/√3 ≈ 57.7m"]},
+    {q:"From the top of a 20m tall building, the angle of depression of a car is 45°. Find the distance of the car from the building's base.", steps:["tan45° = 20/distance","1 = 20/distance → distance = 20m"]}
+   ],
+   problems:[
+    {q:"A kite is flying at a height of 60m, attached to a string inclined at 60° to the ground. Find the length of the string.", diff:"Word problem", steps:["sin60° = 60/L","L = 60/sin60° = 60/(√3/2) = 120/√3 = 40√3 m"]},
+    {q:"The angle of elevation of the top of a tower from a point 30m away is 30°. Find the height of the tower.", diff:"Direct", steps:["tan30° = h/30","h = 30×(1/√3) = 10√3 m"]},
+    {q:"From a point on the ground, the angle of elevation of the top of a tower is 60°. Moving 40m closer, the angle becomes 90°... (instead: from 40m away, angle is 60°, find height).", diff:"Direct", steps:["tan60°=h/40","h=40√3 m"]},
+    {q:"Two ships are on either side of a lighthouse 75m tall. Angles of depression are 30° and 45°. Find the distance between the ships.", diff:"Word problem", steps:["Ship 1: tan30°=75/d1 → d1=75√3","Ship 2: tan45°=75/d2 → d2=75","Distance = d1+d2 = 75√3+75 = 75(√3+1) ≈ 204.9m"]},
+    {q:"The shadow of a tower is 30m long when the sun's elevation is 30°, and 20m when it is θ. Find θ.", diff:"Medium", steps:["Height h=30tan30°=30/√3=10√3","tanθ=h/20=10√3/20=√3/2... recompute using known height:","Actually h=10√3, tanθ=10√3/20=0.866 → θ≈60°"]},
+    {q:"A man standing 40m from a tower observes the angle of elevation of the top as 45°. Find the height of the tower.", diff:"Direct", steps:["tan45°=h/40 → h=40m (since tan45°=1)"]}
+   ]}
+ ],
+ prob: [
+  {id:"basicprob", name:"Probability of Single Events",
+   concept:"Identify the total number of equally likely outcomes and the number that satisfy the event, then apply P(E) = favourable/total.",
+   examples:[
+    {q:"A bag has 3 red, 4 blue, 5 green balls. Find the probability of drawing a blue ball.", steps:["Total balls=3+4+5=12","Favourable (blue)=4","P(blue)=4/12=1/3"]},
+    {q:"Two dice are rolled. Find P(sum = 7).", steps:["Total outcomes=36","Favourable: (1,6)(2,5)(3,4)(4,3)(5,2)(6,1) = 6 outcomes","P(sum=7)=6/36=1/6"]}
+   ],
+   problems:[
+    {q:"A card is drawn from a well-shuffled deck of 52. Find P(getting a face card).", diff:"Direct", steps:["Face cards = 4 suits × 3 (J,Q,K) = 12","P = 12/52 = 3/13"]},
+    {q:"A box has 90 discs numbered 1-90. Find the probability of picking a disc with a two-digit number.", diff:"Medium", steps:["Two-digit numbers: 10 to 90 → 81 numbers","P = 81/90 = 9/10"]},
+    {q:"A die is thrown once. Find P(number is a multiple of 3 or 5).", diff:"Direct", steps:["Multiples of 3 or 5 among 1-6: 3,5,6 → 3 outcomes","P = 3/6 = 1/2"]},
+    {q:"A bag has 5 red and 3 black balls. One ball is drawn. Find P(not black).", diff:"Direct", steps:["Total=8, black=3","P(not black) = 1 - 3/8 = 5/8"]},
+    {q:"From a group of 3 boys and 2 girls, a person is selected at random. Find P(girl is selected).", diff:"Word problem", steps:["Total=5, girls=2","P = 2/5"]},
+    {q:"Two coins are tossed simultaneously. Find P(at least one head).", diff:"Medium", steps:["Sample space: HH,HT,TH,TT (4 outcomes)","At least one head: HH,HT,TH = 3 outcomes","P = 3/4"]}
+   ]}
+ ],
+ stats: [
+  {id:"meanmedmode", name:"Mean, Median, Mode of Grouped Data",
+   concept:"For grouped (class interval) data, use the direct/assumed-mean formula for mean, the cumulative frequency method for median, and the modal class formula for mode.",
+   examples:[
+    {q:"Find the mean of the data: classes 0-10,10-20,20-30 with frequencies 5,10,5 (use midpoints 5,15,25).", steps:["Σfx = 5(5)+10(15)+5(25) = 25+150+125 = 300","Σf = 5+10+5 = 20","Mean = 300/20 = 15"]},
+    {q:"Find the modal class and mode for frequencies: 0-10:5, 10-20:8, 20-30:12, 30-40:6 (mode formula: l+[(f1-f0)/(2f1-f0-f2)]×h).", steps:["Highest frequency=12, modal class=20-30","l=20, f1=12, f0=8, f2=6, h=10","Mode=20+[(12-8)/(24-8-6)]×10 = 20+(4/10)×10 = 24"]}
+   ],
+   problems:[
+    {q:"Find the mean of: classes 10-20,20-30,30-40 with frequencies 3,5,2 (midpoints 15,25,35).", diff:"Direct", steps:["Σfx=3(15)+5(25)+2(35)=45+125+70=240","Σf=10","Mean=240/10=24"]},
+    {q:"Find the median class for cumulative frequencies: up to 10:5, up to 20:15, up to 30:25, up to 40:30 (n=30).", diff:"Medium", steps:["n/2=15","Cumulative frequency reaching 15 is at class 10-20 (cf just before=5, this class's cf=15)","Median class = 10-20"]},
+    {q:"For data with l=25, n/2=20, cf=12, f=8, h=5 find the median.", diff:"Direct", steps:["Median = l+[(n/2-cf)/f]×h","=25+[(20-12)/8]×5=25+5=30"]},
+    {q:"Find the mode of the data: classes 0-20:10, 20-40:35, 40-60:52, 60-80:61, 80-100:38 (find modal class first).", diff:"Medium", steps:["Highest frequency=61, modal class=60-80","l=60,f1=61,f0=52,f2=38,h=20","Mode=60+[(61-52)/(122-52-38)]×20=60+(9/32)×20≈65.6"]},
+    {q:"The mean of 10 observations is 15. If one observation 25 is replaced by 35, find the new mean.", diff:"Word problem", steps:["Original sum=10×15=150","New sum=150-25+35=160","New mean=160/10=16"]},
+    {q:"If the mean and median of a data set are 24 and 26, use the empirical formula to estimate the mode.", diff:"Direct", steps:["Mode = 3×Median - 2×Mean","= 3(26)-2(24) = 78-48 = 30"]}
+   ]}
+ ]
+};
+
+function getProgress(){ try{ const p=localStorage.getItem('tsmb_topic_progress'); return p?JSON.parse(p):{}; }catch(e){ return {}; } }
+function saveProgress(p){ try{ localStorage.setItem('tsmb_topic_progress', JSON.stringify(p)); }catch(e){} }
+function markResult(topicId, gotIt){
+  const p = getProgress();
+  if(!p[topicId]) p[topicId] = {attempted:0, correct:0};
+  p[topicId].attempted++;
+  if(gotIt) p[topicId].correct++;
+  saveProgress(p);
+}
+function topicAccuracy(topicId){
+  const p = getProgress()[topicId];
+  if(!p || p.attempted===0) return null;
+  return Math.round((p.correct/p.attempted)*100);
+}
+function chapterAvgAccuracy(chapterId){
+  const topics = TOPICS[chapterId];
+  if(!topics) return 0;
+  let sum=0, n=0;
+  topics.forEach(t=>{ const a=topicAccuracy(t.id); if(a!==null){sum+=a; n++;} });
+  return n? Math.round(sum/n) : 0;
+}
+
+let tab='chapters';
+const nav=document.getElementById('nav');
+const tabs=[['chapters','Chapters'],['formulas','Formula Bank'],['weak','Weak Areas']];
+tabs.forEach(([id,label])=>{
+  const b=document.createElement('button'); b.textContent=label; b.id='nav-'+id;
+  b.onclick=()=>{tab=id; render();};
+  nav.appendChild(b);
+});
+
+function render(){
+  tabs.forEach(([id])=>document.getElementById('nav-'+id).classList.toggle('active', tab===id));
+  const main=document.getElementById('main'); main.innerHTML='';
+  if(tab==='chapters') renderChapters(main);
+  if(tab==='formulas') renderFormulaPicker(main);
+  if(tab==='weak') renderWeak(main);
+}
+
+function renderChapters(main){
+  const card=document.createElement('div'); card.className='card';
+  card.innerHTML='<h2>TS SSC Class 10 Maths — Syllabus</h2><p class="soon">Every chapter has worked examples and textbook-style practice problems with full step-by-step solutions.</p><div class="grid" id="cg"></div>';
+  main.appendChild(card);
+  const cg=card.querySelector('#cg');
+  CHAPTERS.forEach((c,i)=>{
+    const pct = chapterAvgAccuracy(c.id);
+    const div=document.createElement('div'); div.className='chip';
+    div.innerHTML=`<div class="n">Chapter ${i+1}${c.built?'':' · formulas only'}</div><div class="t">${c.name}</div><div class="bar"><i style="width:${pct}%"></i></div>`;
+    div.onclick=()=> c.built ? showTopics(c.id) : (tab='formulas', render(), showFormulas(c.id));
+    cg.appendChild(div);
+  });
+}
+
+function showTopics(chapterId){
+  const c = CHAPTERS.find(x=>x.id===chapterId);
+  const topics = TOPICS[chapterId];
+  const main=document.getElementById('main'); main.innerHTML='';
+  const back=document.createElement('button'); back.className='back'; back.textContent='← Back to chapters';
+  back.onclick=()=>{tab='chapters'; render();}; main.appendChild(back);
+  const card=document.createElement('div'); card.className='card';
+  card.innerHTML=`<h2>${c.name} — Topics</h2>`;
+  main.appendChild(card);
+  topics.forEach(t=>{
+    const acc = topicAccuracy(t.id);
+    const div=document.createElement('div'); div.className='chip'; div.style.marginBottom='10px'; div.style.display='block';
+    div.innerHTML=`<div class="t">${t.name}</div><div class="n">${acc===null?'Not attempted yet':'Self-checked accuracy: '+acc+'%'} · ${t.problems.length} practice problems</div>`;
+    div.onclick=()=>showTopic(chapterId, t.id);
+    card.appendChild(div);
+  });
+}
+
+function showTopic(chapterId, topicId){
+  const t = TOPICS[chapterId].find(x=>x.id===topicId);
+  const main=document.getElementById('main'); main.innerHTML='';
+  const back=document.createElement('button'); back.className='back'; back.textContent='← Back to topics';
+  back.onclick=()=>showTopics(chapterId); main.appendChild(back);
+
+  const concept=document.createElement('div'); concept.className='card';
+  concept.innerHTML=`<h2>${t.name}</h2><p style="font-size:.9rem">${t.concept}</p>`;
+  main.appendChild(concept);
+
+  const ex=document.createElement('div'); ex.className='card';
+  ex.innerHTML='<h3>Worked Examples</h3>';
+  t.examples.forEach(e=>{
+    const d=document.createElement('div'); d.className='example';
+    d.innerHTML=`<div class="lbl">${e.q}</div>` + e.steps.map(s=>`<div class="step">${s}</div>`).join('');
+    ex.appendChild(d);
+  });
+  main.appendChild(ex);
+
+  const pr=document.createElement('div'); pr.className='card';
+  pr.innerHTML='<h3>Practice — solve on paper, then check your steps</h3>';
+  t.problems.forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='problem';
+    d.innerHTML=`<div class="diff">${p.diff}</div><div class="ptext">${i+1}. ${p.q}</div>`;
+    const showBtn=document.createElement('button'); showBtn.className='ghost'; showBtn.textContent='Show solution';
+    const sol=document.createElement('div'); sol.className='solbox';
+    sol.innerHTML = p.steps.map(s=>`<div class="step">${s}</div>`).join('');
+    const check=document.createElement('div'); check.className='selfcheck'; check.style.display='none';
+    const gotIt=document.createElement('button'); gotIt.textContent='✓ I solved it correctly';
+    const missed=document.createElement('button'); missed.textContent='✗ I need more practice';
+    check.appendChild(gotIt); check.appendChild(missed);
+    showBtn.onclick=()=>{
+      sol.style.display='block'; check.style.display='flex'; showBtn.style.display='none';
+    };
+    gotIt.onclick=()=>{ markResult(t.id, true); gotIt.classList.add('got-it','picked'); missed.classList.add('picked'); gotIt.disabled=true; missed.disabled=true; };
+    missed.onclick=()=>{ markResult(t.id, false); missed.classList.add('missed','picked'); gotIt.classList.add('picked'); gotIt.disabled=true; missed.disabled=true; };
+    d.appendChild(showBtn); d.appendChild(sol); d.appendChild(check);
+    pr.appendChild(d);
+  });
+  main.appendChild(pr);
+}
+
+function renderFormulaPicker(main){
+  const card=document.createElement('div'); card.className='card';
+  card.innerHTML='<h2>Formula Bank</h2><p class="soon">Tap a chapter to view its key formulas.</p><div class="grid" id="fg"></div>';
+  main.appendChild(card);
+  const fg=card.querySelector('#fg');
+  CHAPTERS.forEach(c=>{
+    const div=document.createElement('div'); div.className='chip'; div.innerHTML=`<div class="t">${c.name}</div>`;
+    div.onclick=()=>showFormulas(c.id); fg.appendChild(div);
+  });
+}
+function showFormulas(id){
+  const c=CHAPTERS.find(x=>x.id===id);
+  const main=document.getElementById('main'); main.innerHTML='';
+  const back=document.createElement('button'); back.className='back'; back.textContent='← Back to formula bank';
+  back.onclick=()=>{tab='formulas'; render();}; main.appendChild(back);
+  const card=document.createElement('div'); card.className='card';
+  const list=(FORMULAS[id]||[]).map(f=>`<div class="formula">${f}</div>`).join('');
+  card.innerHTML=`<h2>${c.name}</h2>${list||'<p class="soon">Coming soon.</p>'}`;
+  main.appendChild(card);
+}
+
+function renderWeak(main){
+  const card=document.createElement('div'); card.className='card';
+  let rows=[];
+  Object.keys(TOPICS).forEach(chId=>{
+    TOPICS[chId].forEach(t=>{
+      const acc=topicAccuracy(t.id);
+      if(acc!==null) rows.push({name:t.name, chapter:CHAPTERS.find(c=>c.id===chId).name, acc, chId, tId:t.id});
+    });
+  });
+  if(rows.length===0){
+    card.innerHTML='<h2>Weak Areas</h2><p class="soon">Practice a few topics and self-check your answers — your weakest topics will show up here so you know exactly what to revise.</p>';
+  } else {
+    rows.sort((a,b)=>a.acc-b.acc);
+    card.innerHTML='<h2>Weak Areas</h2><p class="soon">Lowest accuracy first — tap to jump straight into practice.</p>';
+    rows.forEach(r=>{
+      const cls = r.acc<50?'low':(r.acc<75?'mid':'high');
+      const row=document.createElement('div'); row.className='weakrow';
+      row.innerHTML=`<div><b>${r.name}</b><div class="n" style="color:var(--sub);font-size:.75rem">${r.chapter}</div></div><div class="acc ${cls}">${r.acc}%</div>`;
+      row.style.cursor='pointer';
+      row.onclick=()=>showTopic(r.chId, r.tId);
+      card.appendChild(row);
+    });
+  }
+  main.appendChild(card);
+  const reset=document.createElement('button'); reset.className='ghost'; reset.textContent='Reset all progress';
+  reset.onclick=()=>{ try{localStorage.removeItem('tsmb_topic_progress');}catch(e){} render(); };
+  main.appendChild(reset);
+}
+
+render();
+</script>
+</body>
+</html>
